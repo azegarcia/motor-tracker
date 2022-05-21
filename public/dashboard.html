@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - MAT</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="dashboard.html">MAT</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-bars"></i></button>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <a class="nav-link" href="dashboard.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+                        <a class="nav-link" href="archive.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Archive
+                        </a>
+                        <a class="nav-link" href="#" onclick="f__signout()">
+                            <div class="sb-nav-link-icon"><i class="fas fa-arrow-alt-circle-left"></i></div>
+                            SignOut
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as:</div>
+                    Admin
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <div class="row mt-4">
+                        <div class="col-xl-6">
+                            <div class="input-group">
+                                <span class="input-group-text">Date and Time</span>
+                                <input type="text" aria-label="data" class="form-control" id="current_date" disabled
+                                    style="font-size: 1.3em; font-weight: 800;">
+                                <input type="text" aria-label="time" class="form-control" id="current_time" disabled
+                                    style="font-size: 1.3em; font-weight: 800;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-xl-6 mb-4">
+                            <div class="card h-100 mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    Photo
+                                </div>
+                                <div class="card-body">
+                                    <img width="100%" id="latest_photo" src="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mb-4">
+                            <div class="card h-100 mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Location
+                                </div>
+                                <div class="card-body">
+                                    <!-- <div class="mapouter">
+                                        <div class="gmap_canvas">
+                                            <iframe width="900" height="700" id="gmap_canvas" src="" frameborder="0"
+                                                scrolling="no" marginheight="0" marginwidth="0">
+                                            </iframe>
+                                            <br>
+                                            <style>
+                                                .mapouter {
+                                                    position: relative;
+                                                    text-align: right;
+                                                    height: 700px;
+                                                    width: 900px;
+                                                }
+
+                                                .gmap_canvas {
+                                                    overflow: hidden;
+                                                    background: none !important;
+                                                    height: 700px;
+                                                    width: 900px;
+                                                }
+                                            </style>
+                                        </div>
+                                    </div> -->
+                                    <div class="ratio ratio-16x9">
+                                        <iframe class="w-100" id="gmap_canvas" src=""></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+
+    <script src="config.js"></script>
+    <script>
+        var database = firebase.database();
+        database.ref("latest").on("value", function (s) {
+            var val = s.val()
+            $("#latest_photo").attr("src", val.photo);
+            $("#current_date").val(val.date);
+            $("#current_time").val(val.time);
+            var coord = `https://maps.google.com/maps?q=${val.GPS}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+            $("#gmap_canvas").attr("src", coord)
+        })
+    </script>
+</body>
+
+</html>
