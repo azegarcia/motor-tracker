@@ -6,8 +6,11 @@
 #include "esp_camera.h"
 
 FirebaseData firebaseData;
+// do not delete this, for testing purposes
+// const char* ssid = "GENESIS-01";
+// const char* password = "Ma0nipassw0rd?!";
 const char* ssid = "DORM2G";
-const char* password = "palasyoniskye";
+const char* password = "palasyoniskye?!";
 #define FIREBASE_HOST "motoracc-tracker-default-rtdb.firebaseio.com"
 #define FIREBASE_AUTH "kSLlkxtCFscZ375XgZjHTKdifH705qpjeFZPAni8"
 
